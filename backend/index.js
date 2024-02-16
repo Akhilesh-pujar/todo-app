@@ -31,22 +31,31 @@ app.get("/todos", async function(req,res){
  
 })
 app.put("/completed/:id", async function(req,res){
+  const {id} = req.params;
+
     const updatepayload = req.body
+
     const parsepayload = updateTodo.safeParse(updatepayload);
     if(!parsepayload.success){
         res.status(411).json({msg:"wrong inputs"})
         return;
     }
+    try{
+      const updateTodo = await todo.findByIdAndUpdate(id,{completed:true}, {new:true});
+       if(!updateTodo){
+        res.status(404).json({msg:"todo not found"});
+        return;
+       }
+       res.json({
+        msg:"Todo marked as completed",
+        todo:updateTodo
+       })
 
-   await todo.update({
-    _id:req.body,
-
-   },{
-    completed:true
-   })
-   res.json({
-    msg:"Todo marked as completed"
-   })
+    }
+    catch(error){
+      console.log("Error marking as complete:", error);
+      res.status(500).json({ msg: "Internal server error" });
+    }
 })
 
 

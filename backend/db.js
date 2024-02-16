@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-mongoose.connect("mongodb+srv://todo-database:NQuFUHoSBiLOY48I@cluster0.xkcpzov.mongodb.net/?retryWrites=true&w=majority")
+const URI = process.env.MONGODB_URL
+mongoose.connect(URI)
 
 const TodoSchema = mongoose.Schema({
     title :String,
